@@ -115,8 +115,8 @@ router.put('/:id', withAuth, (req, res) => {
             where: {
                 id: req.params.id
             }
-        }
-    )
+        })
+
     .then(dbPostData => {
         if (!dbPostData) {
             res.status(404).json({ message: 'No post found with this id' });
@@ -124,11 +124,9 @@ router.put('/:id', withAuth, (req, res) => {
         }
         res.json(dbPostData);
     })
-    .catch(err => {
-        console.log(err);
-        res.status(500).json(err)
-    });
-});
+    .catch(err => res.status(500).json(err));
+
+  });
 
 
 // DELETE delete blog post //
