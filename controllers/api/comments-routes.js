@@ -22,7 +22,7 @@ router.get('/', (req, res) => {
     });
 });
 
-// Post a new comment //
+// POST api // create a new comment //
 router.post('/', withAuth, (req, res) => {
     // create a comment /
     Comment.create({
@@ -33,7 +33,7 @@ router.post('/', withAuth, (req, res) => {
     .then(dbCommentData => res.json(dbCommentData))
     .catch(err => {
         console.log(err);
-        res.status(400).json(err);
+        res.status(500).json(err);
     });
 });
 
@@ -44,16 +44,14 @@ router.delete('/:id', withAuth, (req, res) => {
             id: req.params.id
         }
     })
-    .then(dbCommentData => {
-        res.status(404.json({ message: 'no comment found with this id' }));
-    }) return;
-}
-res.json(dbCommentData);
-}) 
-.catch(err => {
-    console.log(err);
-    res.status(500).json(err);
-});
+    .then(dbUserData => {
+        if (!dbUserData) {
+            res.status(404).json({ message: 'No post found with this id' });
+            return;
+        }
+        res.json(dbUserData);
+    })
+    .catch(err => res.status(500).json(err));
 });
 
 module.exports = router;

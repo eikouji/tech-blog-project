@@ -14,43 +14,27 @@ const withAuth = require('../../utils/auth');
 
 // GET blog Posts //
 router.get('/', (req, res) => {
-    Post.findAll({
-        attributes: [
-            'id',
-            'post_text',
-            'title',
-            'created_at',
-        ],
-
-        // include these details //
-        include: [
-            {
-                model: User,
-                attributes: ['username']
-            },
-            {
-                model: Comment,
-                attributes: [
-                    'id',
-                    'comment_text',
-                    'post-id',
-                    'user-id',
-                    'created-at'
-                ],
-                include: User,
-                attributes: ['username']
-            }
-        
-
-        ]
-    })
-    // return posts //
-    .then(dbPostData => res.json(dbPostData))
-    // error //
-    .catch(err => {
-        console.log(err);
-        res.status(500).json(err);
-    });
+  Post.findAll({
+      attributes: ['id', 'title', 'content', 'created_at'],
+      order: [['created_at', 'DESC']],
+      include: [
+          {
+              model: Comment,
+              attributes: ['id', 'comment', 'post_id', 'user_id', 'created_at'],
+              include: {
+                  model: User,
+                  attributes: ['username']
+              }
+          },
+          {
+              model: User,
+              attributes: ['username']
+          }
+      ]
+  })
+      .then(dbPostData => res.json(dbPostData))
+      .catch(err => res.status(500).json(err));
+});
 });
 
 // get One blog post by id//
@@ -74,7 +58,13 @@ router.get('/:id', (req, res) => {
         },
         {
             model: Comment,
-            attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
+            attributes: [
+              'id', 
+              'comment_text', 
+              'post_id', 
+              'user_id', 
+              'created_at'
+            ],
             include: {
                 model: User,
                 attributes: ['username']

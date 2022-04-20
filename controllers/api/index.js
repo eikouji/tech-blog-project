@@ -8,6 +8,18 @@ const apiRoutes = require('./api');
 
 const homeRoutes = require('./home-routes.js');
 
+// User routes //
+
+const userRoutes = require('./user-routes');
+
+// Post routes //
+
+const postRoutes = require('./post-routes');
+
+// Comments routes //
+
+const commentRoutes = require('./comments-routes');
+
 // Dashboard Routes //
 const dashboardRoutes = require('./dashboard-routes.js');
 
